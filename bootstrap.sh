@@ -99,7 +99,7 @@ else
     echo "--- Smoke-testing scripts (using system python3) ---"
 fi
 ALL_OK=true
-for script in papers.py find_examples.py read_file.py list_repos.py hf_docs.py inspect_dataset.py hf_jobs.py hf_repo_files.py hf_repo_git.py; do
+for script in papers.py openalex.py core_search.py find_examples.py read_file.py list_repos.py hf_docs.py inspect_dataset.py hf_jobs.py hf_repo_files.py hf_repo_git.py; do
     path="$REPO_DIR/scripts/$script"
     if [ ! -f "$path" ]; then
         echo "  ⚠ $script missing (not yet ported)"

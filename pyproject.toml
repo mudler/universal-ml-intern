@@ -13,6 +13,7 @@ dependencies = [
     "nbconvert>=7.16.0",
     "thefuzz>=0.22.0",
     "python-dotenv>=1.0.0",
+    "pypdf>=5.0.0",
 ]
 
 [project.optional-dependencies]

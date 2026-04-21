@@ -122,6 +122,7 @@ Each skill lives under `skills/<name>/SKILL.md` with its invocation instructions
 | Skill | Purpose | Script |
 |---|---|---|
 | `hf-papers` | Discover papers, read sections, trace citations, find linked datasets/models | `scripts/papers.py` |
+| `paper-search-alt` | Fallback paper search — OpenAlex (broad, no-auth, PDF extraction) and CORE (full-text BODY search) | `scripts/{openalex,core_search}.py` |
 | `github-code` | List org repos, find example scripts, read source files (line ranges, ipynb→md) | `scripts/{list_repos,find_examples,read_file}.py` |
 | `hf-docs` | Explore and fetch HuggingFace library docs (transformers, trl, datasets, peft, …) | `scripts/hf_docs.py` |
 | `hf-datasets` | Inspect HF dataset schema, splits, sample rows in one call | `scripts/inspect_dataset.py` |
@@ -230,6 +231,8 @@ Expected environment variables (loaded from `.env` in repo root or exported in s
 - `HF_TOKEN` — Hugging Face token (required for HF API, datasets, jobs, repos).
 - `GITHUB_TOKEN` — personal access token (required for `github-code` scripts).
 - `S2_API_KEY` — optional Semantic Scholar API key (raises rate limits; works without).
+- `CORE_API_KEY` — required for `paper-search-alt` CORE full-text search. Free, from https://core.ac.uk/services/api.
+- `OPENALEX_MAILTO` — optional. Your email for OpenAlex's "polite pool" (higher rate limits).
 - `HF_NAMESPACE` — optional. `hf-jobs` defaults to `whoami().name`; override if you operate under a different namespace (e.g. an org).
 
 Scripts read these directly from the environment. Python deps and `.env` scaffolding are handled by `bash bootstrap.sh` — see the [Bootstrap section](#bootstrap-verify-the-environment-before-first-use) above. The agent is responsible for verifying the environment on session start and running bootstrap if anything is missing.
