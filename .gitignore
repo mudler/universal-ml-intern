@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Env / secrets
+.env
+*.local
+
+# uv / pip
+uv.lock
+dist/
+build/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
