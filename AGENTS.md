@@ -44,10 +44,10 @@ test -n "$GITHUB_TOKEN"   # or:                         grep -q '^GITHUB_TOKEN=.
 python3 -c 'import whoosh' 2>/dev/null || echo "whoosh missing — hf-docs will fall back to substring search (fine)"
 ```
 
-A one-liner that's agent-friendly:
+A one-liner that's agent-friendly (uses the venv Python created by bootstrap):
 
 ```bash
-python3 scripts/papers.py --help >/dev/null 2>&1 && echo OK || echo NEEDS_BOOTSTRAP
+./.venv/bin/python scripts/papers.py --help >/dev/null 2>&1 && echo OK || echo NEEDS_BOOTSTRAP
 ```
 
 ### What bootstrap.sh does
@@ -94,6 +94,26 @@ Spawn the **research sub-agent** (see `skills/research-subagent/`) when the rese
 Skip research only for trivial non-code operations (status checks, simple bash).
 
 ---
+
+## How to invoke scripts
+
+**Always use the repo's venv Python**, not the system `python3` or `python`. The venv is created by `bootstrap.sh` (via `uv sync`) at `.venv/bin/python` relative to this file.
+
+Two equivalent patterns — pick whichever is convenient:
+
+```bash
+# Absolute-path pattern (works from any cwd):
+REPO=/path/to/universal-ml-intern      # directory containing AGENTS.md
+"$REPO/.venv/bin/python" "$REPO/scripts/papers.py" --op search --query "LLM quantization"
+
+# Relative-path pattern (requires cwd = repo root):
+cd /path/to/universal-ml-intern
+./.venv/bin/python scripts/papers.py --op search --query "LLM quantization"
+```
+
+Skill examples in `skills/<name>/SKILL.md` use `python scripts/<name>.py` for readability — substitute `./.venv/bin/python` (or `"$REPO/.venv/bin/python"`) when actually invoking.
+
+If the venv is missing, run bootstrap first — see the [Bootstrap](#bootstrap-verify-the-environment-before-first-use) section.
 
 ## Skills available
 

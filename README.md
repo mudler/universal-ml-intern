@@ -1,12 +1,16 @@
 # universal-ml-intern
 
-A harness-agnostic port of Hugging Face's [ml-intern](https://github.com/huggingface/ml-intern) — the prompts, skills, and tools it uses to autonomously research, implement, and run ML experiments, packaged as **plain scripts and skill files** so any agentic CLI that honors the [AGENTS.md](https://agents.md) convention (Claude Code, Codex, Cursor, Aider, and others) can drive them.
+A rework of Hugging Face's [ml-intern](https://github.com/huggingface/ml-intern) that drops the bespoke agent loop and lets **any agentic harness** drive the same autonomous-ML-research workflow — Claude Code, Codex, Cursor, Aider, or anything else that honors the [AGENTS.md](https://agents.md) convention.
+
+ml-intern ships a complete custom stack: its own agentic loop, LLM client, MCP client, sandbox, context manager, doom-loop detector, approval flow, and terminal UI. Modern agentic CLIs already provide all of that. This project keeps the parts of ml-intern that *aren't* reinventable — the system-prompt discipline, the skill set, the ported research/jobs/repos tooling — and repackages them as plain scripts + skill markdown + a standard `AGENTS.md` contract.
+
+In short: **same ML-intern behavior, no custom harness.** You bring the agent; this brings the prompts, skills, and tools.
 
 ## What this is and isn't
 
-**Is:** AGENTS.md + skill definitions + ported Python scripts for paper search, citation graphs, GitHub code discovery, HF docs/datasets/jobs/repos. Designed to be cloned into *any* project and loaded by any harness that reads `AGENTS.md` at repo root. A `CLAUDE.md` symlink is included so Claude Code also picks it up automatically.
+**Is:** `AGENTS.md` + skill definitions + ported Python scripts for paper search, citation graphs, GitHub code discovery, HF docs/datasets/jobs/repos. Designed to be cloned into *any* project and loaded by any harness that reads `AGENTS.md` at repo root. A `CLAUDE.md` symlink is included so Claude Code also picks it up automatically as project memory.
 
-**Isn't:** an agent loop, a sandbox, a chat UI, or a bespoke LLM client. Those already exist in your harness.
+**Isn't:** an agent loop, a sandbox, a chat UI, or a bespoke LLM client. Those already exist in your harness — we don't re-implement them.
 
 ## Layout
 

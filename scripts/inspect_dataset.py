@@ -82,13 +82,28 @@ def _format_structure(configs: list[SplitConfig], max_rows: int = 10) -> str:
     return "\n".join(lines)
 
 
-def _get_type_str(col_info: dict) -> str:
+def _get_type_str(col_info: Any) -> str:
+    # HF encodes nested sequence schemas as a list of sub-feature dicts,
+    # e.g. messages: [{role: Value, content: Value}]. Describe as Sequence[{...}].
+    if isinstance(col_info, list):
+        if not col_info:
+            return "Sequence[unknown]"
+        first = col_info[0]
+        if isinstance(first, dict):
+            sub = ", ".join(f"{k}: {_get_type_str(v)}" for k, v in first.items())
+            return f"Sequence[{{{sub}}}]"
+        return f"Sequence[{_get_type_str(first)}]"
+    if not isinstance(col_info, dict):
+        return str(col_info)
     dtype = col_info.get("dtype") or col_info.get("_type", "unknown")
     if col_info.get("_type") == "ClassLabel":
         names = col_info.get("names", [])
         if names and len(names) <= 5:
             return f"ClassLabel ({', '.join(f'{n}={i}' for i, n in enumerate(names))})"
         return f"ClassLabel ({len(names)} classes)"
+    if col_info.get("_type") == "Sequence":
+        inner = col_info.get("feature", {})
+        return f"Sequence[{_get_type_str(inner)}]"
     return str(dtype)
 
 

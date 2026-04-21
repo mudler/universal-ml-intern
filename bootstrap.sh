@@ -89,7 +89,15 @@ fi
 echo ""
 
 # --- 5. Smoke-test scripts ---
-echo "--- Smoke-testing scripts ---"
+# Prefer the venv interpreter created by `uv sync` so the test reflects what
+# the agent will actually use. Fall back to system python3 if no venv exists.
+if [ -x "$REPO_DIR/.venv/bin/python" ]; then
+    PY="$REPO_DIR/.venv/bin/python"
+    echo "--- Smoke-testing scripts (using .venv/bin/python) ---"
+else
+    PY="python3"
+    echo "--- Smoke-testing scripts (using system python3) ---"
+fi
 ALL_OK=true
 for script in papers.py find_examples.py read_file.py list_repos.py hf_docs.py inspect_dataset.py hf_jobs.py hf_repo_files.py hf_repo_git.py; do
     path="$REPO_DIR/scripts/$script"
@@ -97,7 +105,7 @@ for script in papers.py find_examples.py read_file.py list_repos.py hf_docs.py i
         echo "  ⚠ $script missing (not yet ported)"
         continue
     fi
-    if python3 "$path" --help &>/dev/null; then
+    if "$PY" "$path" --help &>/dev/null; then
         echo "  ✓ $script"
     else
         echo "  ✗ $script failed --help"
